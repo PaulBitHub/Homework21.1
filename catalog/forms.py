@@ -1,4 +1,5 @@
-from django.forms import ModelForm, forms, BooleanField
+from django import forms
+from django.forms import BooleanField
 from catalog.models import Product, Version
 
 
@@ -12,7 +13,7 @@ class StyleFormMixin:
                 field.widget.attrs['class'] = 'form-control'
 
 
-class ProductForm(StyleFormMixin, ModelForm):
+class ProductForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
@@ -41,7 +42,7 @@ class ProductForm(StyleFormMixin, ModelForm):
             return clean_data
 
 
-class VersionForm(StyleFormMixin, ModelForm):
+class VersionForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Version
         fields = '__all__'

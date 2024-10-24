@@ -51,6 +51,11 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
     updated_at = models.DateTimeField(auto_now=True, verbose_name="Дата изменения")
 
+    is_published = models.BooleanField(
+        default=False,
+        verbose_name="Опубликовано",
+        help_text="Статус публикации продукта")
+
     views_counter = models.PositiveIntegerField(
         verbose_name="Счётчик просмотров",
         help_text="Укажите кол-во просмотров",

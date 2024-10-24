@@ -19,7 +19,7 @@ class ProductForm(StyleFormMixin, ModelForm):
         exclude = ("views_counter",)
 
     def clean_name(self):
-        cleaned_data = self.cleaned_data['name']
+        cleaned_data = self.cleaned_data['product_name']
         forbidden_words = [
             'казино',
             'криптовалюта',
@@ -37,7 +37,7 @@ class ProductForm(StyleFormMixin, ModelForm):
         return cleaned_data
 
     def clean_description(self):
-        cleaned_data = self.cleaned_data['description']
+        cleaned_data = self.cleaned_data['product_description']
         forbidden_words = [
             'казино',
             'криптовалюта',

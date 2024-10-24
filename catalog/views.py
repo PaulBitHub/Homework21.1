@@ -1,15 +1,25 @@
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.forms import inlineformset_factory
-from catalog.forms import VersionForm
-from catalog.models import Product, Version, Category
-
 from catalog.forms import ProductForm
-from catalog.models import Product
+from catalog.models import Product, Version
 
 
 class ProductListView(ListView):
     model = Product
+
+    def get_context_data(self, *args, **kwargs):
+        context_data = super().get_context_data(*args, **kwargs)
+        for product in context_data['product_list']:
+            active_version = Version.objects.filter(product=product, version_sign=True)
+            if active_version:
+                product.active_version = active_version.last().version_name
+            else:
+                product.active_version = 'Отсутствует'
+
+            product.can_unpublish = self.request.user.has_perm('catalog.can_unpublish_product')
+            product.can_edit_as_moderator = self.request.user.has_perm('catalog.can_change_product_description') or \
+                                            self.request.user.has_perm('catalog.can_change_product_category')
+        return context_data
 
 class ProductDetailView(DetailView):
     model = Product
@@ -30,16 +40,6 @@ class ProductUpdateView(UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:product_list')
-
-    def get_context_data(self, *args, **kwargs):
-        context_data = super().get_context_data(**kwargs)
-        if self.request.user == self.object.owner:
-            ProductFormset = inlineformset_factory(Product, Version, VersionForm, extra=1)
-            if self.request.method == 'POST':
-                context_data['formset'] = ProductFormset(self.request.POST, instance=self.object)
-            else:
-                context_data['formset'] = ProductFormset(instance=self.object)
-        return context_data
 
     def get_success_url(self):
         return reverse("catalog:product_details", args=[self.kwargs.get('pk')])

@@ -19,40 +19,26 @@ class ProductForm(StyleFormMixin, ModelForm):
         exclude = ("views_counter",)
 
     def clean_name(self):
-        cleaned_data = self.cleaned_data['product_name']
-        forbidden_words = [
-            'казино',
-            'криптовалюта',
-            'крипта',
-            'биржа',
-            'дешево',
-            'бесплатно',
-            'обман',
-            'полиция',
-            'радар'
-        ]
-        for word in forbidden_words:
-            if word in cleaned_data:
-                raise forms.ValidationError('В названии продукта не должно быть запрещенных слов')
-        return cleaned_data
+        clean_data = self.cleaned_data['product_name']
+
+        words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
+
+        for word in words:
+            if word in clean_data:
+                raise forms.ValidationError(
+                    'Вы не можете использовать запрещенные слова в названии продукта или описании продукта')
+            return clean_data
 
     def clean_description(self):
-        cleaned_data = self.cleaned_data['product_description']
-        forbidden_words = [
-            'казино',
-            'криптовалюта',
-            'крипта',
-            'биржа',
-            'дешево',
-            'бесплатно',
-            'обман',
-            'полиция',
-            'радар'
-        ]
-        for word in forbidden_words:
-            if word in cleaned_data:
-                raise forms.ValidationError('В описании продукта не должно быть запрещенных слов')
-        return cleaned_data
+        clean_data = self.cleaned_data['product_description']
+
+        words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
+
+        for word in words:
+            if word in clean_data:
+                raise forms.ValidationError(
+                    'Вы не можете использовать запрещенные слова в названии продукта или описании продукта')
+            return clean_data
 
 
 class VersionForm(StyleFormMixin, ModelForm):

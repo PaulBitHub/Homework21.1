@@ -1,5 +1,5 @@
 from django.contrib import admin
-from catalog.models import Product, Category
+from catalog.models import Product, Category, Version
 
 
 @admin.register(Product)
@@ -13,7 +13,12 @@ class ProductAdmin(admin.ModelAdmin):
         "views_counter"
     )
 
-
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("id", "category_name")
+
+@admin.register(Version)
+class VersionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'product', 'version_number', 'version_name', 'version_sign',)
+    list_filter = ('version_number', 'version_sign',)
+    search_fields = ('version_number', 'version_sign',)

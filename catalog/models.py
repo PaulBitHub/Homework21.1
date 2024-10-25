@@ -70,6 +70,9 @@ class Product(models.Model):
         verbose_name_plural = "Продукты"
         ordering = ["product_name", "product_description", "price"]
 
+    def get_active_version(self):
+        return self.versions.filter(is_current=True).first()
+
 class Version(models.Model):
     product = models.ForeignKey(
         Product,
@@ -93,6 +96,24 @@ class Version(models.Model):
     version_sign = models.BooleanField(
         verbose_name="признак текущей версии", help_text="Версия активна?", default=True
     )
+
+    def save(self, *args, **kwargs):
+        # Если номер версии не установлен, получаем максимальный номер версии для продукта
+        if not self.version_number:
+            max_version = Version.objects.filter(product=self.product).aggregate(models.Max('version_number'))[
+                'version_number__max']
+            self.version_number = (max_version + 1) if max_version is not None else 1
+
+        # Устанавливаем флаг is_current для всех предыдущих версий в False
+        Version.objects.filter(product=self.product, is_current=True).update(is_current=False)
+
+        # Устанавливаем текущую версию как актуальную
+        self.is_current = True
+
+        # Сохраняем версию
+        super().save(*args, **kwargs)
+
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Версия"

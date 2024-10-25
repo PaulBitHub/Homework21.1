@@ -93,7 +93,7 @@ class Version(models.Model):
         help_text="Введите наименование версии продукта",
         **NULLABLE,
     )
-    version_sign = models.BooleanField(
+    is_current = models.BooleanField(
         verbose_name="признак текущей версии", help_text="Версия активна?", default=True
     )
 

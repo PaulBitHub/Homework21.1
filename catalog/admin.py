@@ -10,7 +10,7 @@ class ProductAdmin(admin.ModelAdmin):
         "product_name",
         "product_description",
         "category",
-        "views_counter"
+        "views_counter",
     )
 
 @admin.register(Category)
@@ -19,6 +19,6 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Version)
 class VersionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'product', 'version_number', 'version_name', 'version_sign',)
-    list_filter = ('version_number', 'version_sign',)
-    search_fields = ('version_number', 'version_sign',)
+    list_display = ('id', 'product', 'version_number', 'version_name', 'is_current',)
+    list_filter = ('version_number', 'is_current',)
+    search_fields = ('version_number', 'is_current',)

@@ -20,5 +20,5 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Version)
 class VersionAdmin(admin.ModelAdmin):
     list_display = ('id', 'product', 'version_number', 'version_name', 'is_current',)
-    list_filter = ('version_number', 'is_current',)
+    list_filter = ('version_number', 'is_current','version_name',)
     search_fields = ('version_number', 'is_current',)

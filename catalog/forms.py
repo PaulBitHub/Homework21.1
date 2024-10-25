@@ -20,26 +20,30 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
         exclude = ("views_counter",)
 
     def clean_product_name(self):
-        clean_data = self.cleaned_data['product_name']
+        clean_data = self.cleaned_data.get('product_name', '')
 
         words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
 
         for word in words:
-            if word in clean_data:
+            if word in clean_data.lower():
                 raise forms.ValidationError(
-                    'Вы не можете использовать запрещенные слова в названии продукта или описании продукта')
-            return clean_data
+                    'Вы не можете использовать запрещенные слова в названии продукта или описании продукта'
+                )
+
+        return clean_data
 
     def clean_product_description(self):
-        clean_data = self.cleaned_data['product_description']
+        clean_data = self.cleaned_data.get('product_description', '')
 
         words = ['казино', 'криптовалюта', 'крипта', 'биржа', 'дешево', 'бесплатно', 'обман', 'полиция', 'радар']
 
         for word in words:
-            if word in clean_data:
+            if word in clean_data.lower():
                 raise forms.ValidationError(
-                    'Вы не можете использовать запрещенные слова в названии продукта или описании продукта')
-            return clean_data
+                    'Вы не можете использовать запрещенные слова в названии продукта или описании продукта'
+                )
+
+        return clean_data
 
 
 class VersionForm(StyleFormMixin, forms.ModelForm):
